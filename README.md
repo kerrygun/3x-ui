@@ -24,11 +24,43 @@ As an enhanced fork of the original X-UI project, 3X-UI provides improved stabil
 
 ## Quick Start
 
+### Установка оригинальной версии
+
 ```bash
 bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 ```
 
+### Установка форка с доработками
+
+Если вы используете форк репозитория с собственными доработками:
+
+```bash
+# Установка последней версии из вашего форка
+export GITHUB_REPO="ваш-username/ваш-репозиторий"
+bash <(curl -Ls https://raw.githubusercontent.com/ваш-username/ваш-репозиторий/main/install.sh)
+
+# Или в одной команде
+GITHUB_REPO="ваш-username/ваш-репозиторий" bash <(curl -Ls https://raw.githubusercontent.com/ваш-username/ваш-репозиторий/main/install.sh)
+```
+
+### Обновление
+
+```bash
+# Обновление оригинальной версии
+bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/update.sh)
+
+# Обновление форка
+export GITHUB_REPO="ваш-username/ваш-репозиторий"
+bash <(curl -Ls https://raw.githubusercontent.com/ваш-username/ваш-репозиторий/main/update.sh)
+```
+
+> **Примечание**: Переменная окружения `GITHUB_REPO` позволяет указать любой репозиторий GitHub в формате `username/repository`. По умолчанию используется оригинальный репозиторий `MHSanaei/3x-ui`.
+
 For full documentation, please visit the [project Wiki](https://github.com/MHSanaei/3x-ui/wiki).
+
+## Настройка форка для собственных релизов
+
+Если вы хотите создать форк с собственными доработками и публиковать релизы, см. [FORK_SETUP.md](FORK_SETUP.md) для подробных инструкций.
 
 ## A Special Thanks to
 

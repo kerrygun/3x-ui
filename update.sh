@@ -110,6 +110,11 @@ config_after_update() {
 update_x-ui() {
     cd /usr/local/
     
+    # Определение репозитория (по умолчанию оригинальный, можно переопределить через GITHUB_REPO)
+    GITHUB_REPO="${GITHUB_REPO:-MHSanaei/3x-ui}"
+    GITHUB_USER=$(echo "$GITHUB_REPO" | cut -d'/' -f1)
+    GITHUB_REPO_NAME=$(echo "$GITHUB_REPO" | cut -d'/' -f2)
+    
     if [ -f "/usr/local/x-ui/x-ui" ]; then
         current_xui_version=$(/usr/local/x-ui/x-ui -v)
         echo -e "${green}Current x-ui version: ${current_xui_version}${plain}"
@@ -119,19 +124,19 @@ update_x-ui() {
     
     echo -e "${green}Downloading new x-ui version...${plain}"
     
-    tag_version=$(${curl_bin} -Ls "https://api.github.com/repos/MHSanaei/3x-ui/releases/latest" 2>/dev/null | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    tag_version=$(${curl_bin} -Ls "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" 2>/dev/null | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ ! -n "$tag_version" ]]; then
         echo -e "${yellow}Trying to fetch version with IPv4...${plain}"
-        tag_version=$(${curl_bin} -4 -Ls "https://api.github.com/repos/MHSanaei/3x-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+        tag_version=$(${curl_bin} -4 -Ls "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$tag_version" ]]; then
             _fail "ERROR: Failed to fetch x-ui version, it may be due to GitHub API restrictions, please try it later"
         fi
     fi
     echo -e "Got x-ui latest version: ${tag_version}, beginning the installation..."
-    ${wget_bin} -N -O /usr/local/x-ui-linux-$(arch).tar.gz https://github.com/MHSanaei/3x-ui/releases/download/${tag_version}/x-ui-linux-$(arch).tar.gz 2>/dev/null
+    ${wget_bin} -N -O /usr/local/x-ui-linux-$(arch).tar.gz https://github.com/${GITHUB_REPO}/releases/download/${tag_version}/x-ui-linux-$(arch).tar.gz 2>/dev/null
     if [[ $? -ne 0 ]]; then
         echo -e "${yellow}Trying to fetch version with IPv4...${plain}"
-        ${wget_bin} --inet4-only -N -O /usr/local/x-ui-linux-$(arch).tar.gz https://github.com/MHSanaei/3x-ui/releases/download/${tag_version}/x-ui-linux-$(arch).tar.gz 2>/dev/null
+        ${wget_bin} --inet4-only -N -O /usr/local/x-ui-linux-$(arch).tar.gz https://github.com/${GITHUB_REPO}/releases/download/${tag_version}/x-ui-linux-$(arch).tar.gz 2>/dev/null
         if [[ $? -ne 0 ]]; then
             _fail "ERROR: Failed to download x-ui, please be sure that your server can access GitHub"
         fi
@@ -191,10 +196,10 @@ update_x-ui() {
     chmod +x x-ui bin/xray-linux-$(arch) >/dev/null 2>&1
     
     echo -e "${green}Downloading and installing x-ui.sh script...${plain}"
-    ${wget_bin} -O /usr/bin/x-ui https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.sh >/dev/null 2>&1
+    ${wget_bin} -O /usr/bin/x-ui https://raw.githubusercontent.com/${GITHUB_REPO}/main/x-ui.sh >/dev/null 2>&1
     if [[ $? -ne 0 ]]; then
         echo -e "${yellow}Trying to fetch x-ui with IPv4...${plain}"
-        ${wget_bin} --inet4-only -O /usr/bin/x-ui https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.sh >/dev/null 2>&1
+        ${wget_bin} --inet4-only -O /usr/bin/x-ui https://raw.githubusercontent.com/${GITHUB_REPO}/main/x-ui.sh >/dev/null 2>&1
         if [[ $? -ne 0 ]]; then
             _fail "ERROR: Failed to download x-ui.sh script, please be sure that your server can access GitHub"
         fi
@@ -213,9 +218,9 @@ update_x-ui() {
     
     if [[ $release == "alpine" ]]; then
         echo -e "${green}Downloading and installing startup unit x-ui.rc...${plain}"
-        ${wget_bin} -O /etc/init.d/x-ui https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.rc >/dev/null 2>&1
+        ${wget_bin} -O /etc/init.d/x-ui https://raw.githubusercontent.com/${GITHUB_REPO}/main/x-ui.rc >/dev/null 2>&1
         if [[ $? -ne 0 ]]; then
-            ${wget_bin} --inet4-only -O /etc/init.d/x-ui https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.rc >/dev/null 2>&1
+            ${wget_bin} --inet4-only -O /etc/init.d/x-ui https://raw.githubusercontent.com/${GITHUB_REPO}/main/x-ui.rc >/dev/null 2>&1
             if [[ $? -ne 0 ]]; then
                 _fail "ERROR: Failed to download startup unit x-ui.rc, please be sure that your server can access GitHub"
             fi

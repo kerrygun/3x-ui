@@ -74,7 +74,9 @@ before_show_menu() {
 }
 
 install() {
-    bash <(curl -Ls https://raw.githubusercontent.com/MHSanaei/3x-ui/main/install.sh)
+    # Определение репозитория (по умолчанию оригинальный, можно переопределить через GITHUB_REPO)
+    GITHUB_REPO="${GITHUB_REPO:-MHSanaei/3x-ui}"
+    bash <(curl -Ls https://raw.githubusercontent.com/${GITHUB_REPO}/main/install.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start
@@ -93,7 +95,9 @@ update() {
         fi
         return 0
     fi
-    bash <(curl -Ls https://raw.githubusercontent.com/MHSanaei/3x-ui/main/update.sh)
+    # Определение репозитория (по умолчанию оригинальный, можно переопределить через GITHUB_REPO)
+    GITHUB_REPO="${GITHUB_REPO:-MHSanaei/3x-ui}"
+    bash <(curl -Ls https://raw.githubusercontent.com/${GITHUB_REPO}/main/update.sh)
     if [[ $? == 0 ]]; then
         LOGI "Update is complete, Panel has automatically restarted "
         before_show_menu

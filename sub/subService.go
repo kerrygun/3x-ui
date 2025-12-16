@@ -457,7 +457,11 @@ func (s *SubService) genVlessLink(inbound *model.Inbound, email string) string {
 					params["pqv"] = pqv
 				}
 			}
-			params["spx"] = "/" + random.Seq(15)
+			if spiderXValue, ok := searchKey(realitySettings, "spiderX"); ok {
+				if spiderX, ok := spiderXValue.(string); ok && len(spiderX) > 0 && spiderX != "/" {
+					params["spx"] = "/" + random.Seq(15)
+				}
+			}
 		}
 
 		if streamNetwork == "tcp" && len(clients[clientIndex].Flow) > 0 {
@@ -652,7 +656,11 @@ func (s *SubService) genTrojanLink(inbound *model.Inbound, email string) string 
 					params["pqv"] = pqv
 				}
 			}
-			params["spx"] = "/" + random.Seq(15)
+			if spiderXValue, ok := searchKey(realitySettings, "spiderX"); ok {
+				if spiderX, ok := spiderXValue.(string); ok && len(spiderX) > 0 && spiderX != "/" {
+					params["spx"] = "/" + random.Seq(15)
+				}
+			}
 		}
 
 		if streamNetwork == "tcp" && len(clients[clientIndex].Flow) > 0 {
